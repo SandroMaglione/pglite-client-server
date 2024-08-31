@@ -8,6 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "turbo": "^2.1.1",
     "typescript": "^5.4.5"
   },
