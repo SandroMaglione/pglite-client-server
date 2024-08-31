@@ -5,10 +5,16 @@ import { createServer } from "node:http";
 import { MyApiLive } from "./api";
 
 const HttpLive = HttpApiBuilder.serve(HttpMiddleware.logger).pipe(
-	Layer.provide(HttpApiBuilder.middlewareCors()),
-	Layer.provide(MyApiLive),
-	HttpServer.withLogAddress,
-	Layer.provide(NodeHttpServer.layer(createServer, { port: 3000 })),
+  Layer.provide(
+    HttpApiBuilder.middlewareCors({
+      allowedOrigins: ["*"],
+    }),
+  ),
+  Layer.provide(MyApiLive),
+  HttpServer.withLogAddress,
+  Layer.provide(
+    NodeHttpServer.layer(createServer, { host: "localhost", port: 3000 }),
+  ),
 );
 
 Layer.launch(HttpLive).pipe(NodeRuntime.runMain);

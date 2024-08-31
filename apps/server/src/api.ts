@@ -1,51 +1,34 @@
-import {
-	HttpApi,
-	HttpApiBuilder,
-	HttpApiEndpoint,
-	HttpApiGroup,
-} from "@effect/platform";
-import { Schema } from "@effect/schema";
-import { DateTime, Effect, Layer } from "effect";
+import { HttpApiBuilder } from "@effect/platform";
+import { MyApi } from "@pglite/api";
+import { Effect, Layer } from "effect";
 
-class User extends Schema.Class<User>("User")({
-	id: Schema.Number,
-	name: Schema.String,
-	createdAt: Schema.DateTimeUtc,
-}) {}
-
-class UsersApi extends HttpApiGroup.make("users").pipe(
-	HttpApiGroup.add(
-		HttpApiEndpoint.get("findById", "/users/:id").pipe(
-			HttpApiEndpoint.setSuccess(User),
-			HttpApiEndpoint.setPath(
-				Schema.Struct({
-					id: Schema.NumberFromString,
-				}),
-			),
-		),
-	),
-) {}
-
-class MyApi extends HttpApi.empty.pipe(HttpApi.addGroup(UsersApi)) {}
-
-// --------------------------------------------
-// Implementation
-// --------------------------------------------
-
-const UsersApiLive = HttpApiBuilder.group(MyApi, "users", (handlers) =>
-	handlers.pipe(
-		HttpApiBuilder.handle("findById", ({ path: { id } }) =>
-			Effect.succeed(
-				new User({
-					id,
-					name: "John Doe",
-					createdAt: DateTime.unsafeNow(),
-				}),
-			),
-		),
-	),
+const DbSchemaApiLive = HttpApiBuilder.group(MyApi, "db", (handlers) =>
+  handlers.pipe(
+    HttpApiBuilder.handle("latestMigration", () =>
+      Effect.succeed(`
+                    CREATE TABLE IF NOT EXISTS "eat" (
+                "id" serial PRIMARY KEY NOT NULL,
+                "food_id" integer,
+                "quantity" integer
+            );
+            --> statement-breakpoint
+            CREATE TABLE IF NOT EXISTS "food" (
+                "id" serial PRIMARY KEY NOT NULL,
+                "name" varchar(256)
+            );
+            --> statement-breakpoint
+            DO $$ BEGIN
+             ALTER TABLE "eat" ADD CONSTRAINT "eat_food_id_food_id_fk" FOREIGN KEY ("food_id") REFERENCES "public"."food"("id") ON DELETE no action ON UPDATE no action;
+            EXCEPTION
+             WHEN duplicate_object THEN null;
+            END $$;
+            --> statement-breakpoint
+            CREATE UNIQUE INDEX IF NOT EXISTS "name_idx" ON "food" USING btree ("name");
+                    `),
+    ),
+  ),
 );
 
 export const MyApiLive = HttpApiBuilder.api(MyApi).pipe(
-	Layer.provide(UsersApiLive),
+  Layer.provide(DbSchemaApiLive),
 );
