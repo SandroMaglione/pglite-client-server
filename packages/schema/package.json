@@ -1,0 +1,18 @@
+{
+  "name": "@pglite/schema",
+  "type": "module",
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "typecheck": "tsc"
+  },
+  "exports": {
+    ".": "./src/main.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.33.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.24.2",
+    "typescript": "^5.5.4"
+  }
+}
