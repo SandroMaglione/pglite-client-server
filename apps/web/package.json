@@ -1,0 +1,39 @@
+{
+  "name": "@pglite/web",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "remix vite:build",
+    "dev": "remix vite:dev",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@pglite/api": "workspace:*",
+    "@pglite/schema": "workspace:*",
+    "@effect/schema": "^0.72.0",
+    "@effect/platform": "^0.63.0",
+    "@electric-sql/pglite": "^0.2.4",
+    "@remix-run/node": "^2.11.2",
+    "@remix-run/react": "^2.11.2",
+    "@xstate/react": "^4.1.1",
+    "drizzle-orm": "^0.33.0",
+    "effect": "^3.6.7",
+    "isbot": "^4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "xstate": "^5.17.4"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.11.2",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.1.6",
+    "vite": "^5.1.0",
+    "vite-tsconfig-paths": "^4.2.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
