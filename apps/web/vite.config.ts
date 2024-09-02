@@ -1,4 +1,5 @@
 import { vitePlugin as remix } from "@remix-run/dev";
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -15,5 +16,13 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ["@electric-sql/pglite"],
+  },
+  resolve: {
+    alias: [
+      {
+        find: "@/migrations",
+        replacement: resolve(__dirname, "migrations"),
+      },
+    ],
   },
 });

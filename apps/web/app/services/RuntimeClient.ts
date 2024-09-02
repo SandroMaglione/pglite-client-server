@@ -1,6 +1,7 @@
 import { Config, ConfigProvider, Layer, ManagedRuntime } from "effect";
 import { ApiClient } from "./ApiClient";
 import { PgLite } from "./PgLite";
+import { Versioning } from "./Versioning";
 
 const ConfigProviderVite = Layer.setConfigProvider(
   ConfigProvider.fromJson(import.meta.env),
@@ -18,9 +19,12 @@ const PgLiteConfig = Config.all({
 
 const ApiClientLive = ApiClient.Live(ApiClientConfig);
 const PgLiteLive = PgLite.Live(PgLiteConfig);
+const VersioningLive = Versioning.Live.pipe(Layer.provide(PgLiteLive));
 
-const MainLayer = Layer.mergeAll(PgLiteLive, ApiClientLive).pipe(
-  Layer.provide(ConfigProviderVite),
-);
+const MainLayer = Layer.mergeAll(
+  PgLiteLive,
+  ApiClientLive,
+  VersioningLive,
+).pipe(Layer.provide(ConfigProviderVite));
 
 export const RuntimeClient = ManagedRuntime.make(MainLayer);

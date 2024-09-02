@@ -8,6 +8,20 @@
       "when": 1725111339841,
       "tag": "0000_nostalgic_nuke",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725284505781,
+      "tag": "0001_aspiring_nehzno",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725284849045,
+      "tag": "0002_flaky_juggernaut",
+      "breakpoints": true
     }
   ]
 }

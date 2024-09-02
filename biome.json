@@ -9,6 +9,9 @@
       "recommended": true,
       "complexity": {
         "noStaticOnlyClass": "off"
+      },
+      "suspicious": {
+        "noShadowRestrictedNames": "off"
       }
     }
   },

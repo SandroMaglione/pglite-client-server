@@ -6,6 +6,10 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+export const versioning = pgTable("versioning", {
+  id: serial("id").primaryKey(),
+});
+
 export const food = pgTable(
   "food",
   {
@@ -15,7 +19,7 @@ export const food = pgTable(
   (_) => ({ nameIndex: uniqueIndex("name_idx").on(_.name) }),
 );
 
-export const eat = pgTable("eat", {
+export const serving = pgTable("serving", {
   id: serial("id").primaryKey(),
   foodId: integer("food_id").references(() => food.id),
   quantity: integer("quantity"),

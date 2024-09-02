@@ -1,19 +1,8 @@
-import { Effect } from "effect";
 import { fromPromise, setup } from "xstate";
-import { ApiClient } from "~/services/ApiClient";
-import { PgLite } from "~/services/PgLite";
 import { RuntimeClient } from "~/services/RuntimeClient";
+import { Versioning } from "~/services/Versioning";
 
-const migration = fromPromise(() =>
-  RuntimeClient.runPromise(
-    Effect.gen(function* () {
-      const { client } = yield* ApiClient;
-      const { db } = yield* PgLite;
-      const migration = yield* client.db.latestMigration();
-      yield* Effect.promise(() => db.exec(migration));
-    }),
-  ),
-);
+const migration = fromPromise(() => RuntimeClient.runPromise(Versioning.up));
 
 export const machine = setup({
   types: {

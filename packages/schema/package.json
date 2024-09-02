@@ -2,7 +2,7 @@
   "name": "@pglite/schema",
   "type": "module",
   "scripts": {
-    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit generate",
     "typecheck": "tsc"
   },
   "exports": {
