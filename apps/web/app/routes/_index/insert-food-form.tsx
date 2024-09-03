@@ -1,5 +1,5 @@
 import { useActor } from "@xstate/react";
-import { insertFoodMachine } from "~/machines/inser-food-machine";
+import { insertFoodMachine } from "~/machines/insert-food-machine";
 
 export default function InsertFoodForm() {
   const [snapshot, send] = useActor(insertFoodMachine);

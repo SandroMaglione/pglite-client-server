@@ -14,7 +14,6 @@ const inserting = fromPromise(
   ({ input }: { input: { formEvent: React.FormEvent<HTMLFormElement> } }) =>
     RuntimeClient.runPromise(
       Effect.gen(function* () {
-        const api = yield* ApiDatabase;
         input.formEvent.preventDefault();
         const foodInsert = yield* FormData.fromSchema(
           Schema.Struct({
@@ -26,7 +25,7 @@ const inserting = fromPromise(
           }),
         );
 
-        return yield* api.addFood(foodInsert);
+        return yield* ApiDatabase.addFood(foodInsert);
       }).pipe(
         Effect.provideService(
           FormData,
