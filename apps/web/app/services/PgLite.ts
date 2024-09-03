@@ -1,6 +1,7 @@
 import { PGlite } from "@electric-sql/pglite";
 import { live } from "@electric-sql/pglite/live";
 import { database } from "@pglite/schema";
+import type { Query } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { Config, Context, Data, Effect, Layer } from "effect";
 
@@ -27,8 +28,8 @@ const make = ({ dataDir }: PgLiteConfig) =>
     const drizzleClient = drizzle(db, { schema: database });
 
     const rawQuery = (
-      execute: (client: typeof drizzleClient) => string,
-    ): string => execute(drizzleClient);
+      execute: (client: typeof drizzleClient) => { toSQL(): Query },
+    ): string => execute(drizzleClient).toSQL().sql;
 
     const query = <T>(execute: (client: typeof drizzleClient) => Promise<T>) =>
       Effect.async<T, ErrorPgLite>((cb) => {

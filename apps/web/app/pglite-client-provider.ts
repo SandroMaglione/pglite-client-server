@@ -3,9 +3,10 @@ import React from "react";
 import type { PgLite } from "./services/PgLite";
 
 export const PgLiteClientProvider = React.createContext<
-  Context.Tag.Service<typeof PgLite>["rawQuery"] | undefined
->(undefined);
-
-export const usePgLiteClient = () =>
+  Context.Tag.Service<typeof PgLite>["rawQuery"]
+>(
   // biome-ignore lint/style/noNonNullAssertion: <explanation>
-  React.useContext(PgLiteClientProvider)!;
+  null!,
+);
+
+export const usePgLiteClient = () => React.useContext(PgLiteClientProvider);

@@ -29,7 +29,9 @@ export const food = pgTable(
 
 export const serving = pgTable("serving", {
   id: serial("id").primaryKey(),
-  foodId: integer("food_id").references(() => food.id),
+  food_id: integer("food_id")
+    .references(() => food.id)
+    .notNull(),
   quantity: integer("quantity").notNull(),
 });
 
