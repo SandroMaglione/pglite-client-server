@@ -19,25 +19,22 @@ const make = Effect.map(
       const currentVersion = allMigrations.length;
       yield* Effect.log("Current version", currentVersion);
 
-      const clientVersion = yield* Effect.tryPromise({
-        try: () =>
-          pglite.client
-            .select()
-            .from(versioning)
-            .limit(1)
-            .orderBy(desc(versioning.id)),
-        catch: (error) => new ErrorVersioning({ error }),
-      }).pipe(
-        Effect.flatMap(Array.head),
-        Effect.map(({ id }) => id),
-        Effect.orElseSucceed(() => 0),
-      );
+      const clientVersion = yield* pglite
+        .query((_) =>
+          _.select().from(versioning).limit(1).orderBy(desc(versioning.id)),
+        )
+        .pipe(
+          Effect.mapError((error) => new ErrorVersioning({ error })),
+          Effect.flatMap(Array.head),
+          Effect.map(({ id }) => id),
+          Effect.orElseSucceed(() => 0),
+        );
 
       yield* Effect.log("Client version", clientVersion);
 
       if (clientVersion >= currentVersion) {
         yield* Effect.log("No migrations to run");
-        return;
+        return clientVersion;
       }
 
       yield* Effect.log("Running migrations");
@@ -52,13 +49,13 @@ const make = Effect.map(
 
       yield* Effect.log("Updating version", currentVersion);
 
-      yield* Effect.tryPromise({
-        try: () =>
-          pglite.client.insert(versioning).values({ id: currentVersion }),
-        catch: (error) => new ErrorVersioning({ error }),
-      });
+      yield* pglite
+        .query((_) => _.insert(versioning).values({ id: currentVersion }))
+        .pipe(Effect.mapError((error) => new ErrorVersioning({ error })));
 
       yield* Effect.log("Migration completed 🎉");
+
+      return currentVersion;
     }),
   }),
 );

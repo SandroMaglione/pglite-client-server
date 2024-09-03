@@ -1,5 +1,6 @@
 import { PGlite } from "@electric-sql/pglite";
 import { live } from "@electric-sql/pglite/live";
+import { database } from "@pglite/schema";
 import { drizzle } from "drizzle-orm/pglite";
 import { Config, Context, Data, Effect, Layer } from "effect";
 
@@ -23,20 +24,20 @@ const make = ({ dataDir }: PgLiteConfig) =>
       }),
     );
 
-    const client = drizzle(db);
+    const drizzleClient = drizzle(db, { schema: database });
 
-    const query = <T>(query: string) =>
-      Effect.async<T[], ErrorPgLite>((cb) => {
-        db.query<T>(query)
-          .then((results) => {
-            cb(Effect.succeed(results.rows));
+    const query = <T>(execute: (client: typeof drizzleClient) => Promise<T>) =>
+      Effect.async<T, ErrorPgLite>((cb) => {
+        execute(drizzleClient)
+          .then((result) => {
+            cb(Effect.succeed(result));
           })
           .catch((error) => {
             cb(Effect.fail(new ErrorPgLite({ error })));
           });
       });
 
-    return { db, client, query };
+    return { db, query };
   });
 
 export class PgLite extends Context.Tag("PgLite")<

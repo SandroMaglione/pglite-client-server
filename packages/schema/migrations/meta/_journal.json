@@ -22,6 +22,13 @@
       "when": 1725284849045,
       "tag": "0002_flaky_juggernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725356983838,
+      "tag": "0003_warm_lord_tyger",
+      "breakpoints": true
     }
   ]
 }
