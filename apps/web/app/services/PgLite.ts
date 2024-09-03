@@ -26,6 +26,10 @@ const make = ({ dataDir }: PgLiteConfig) =>
 
     const drizzleClient = drizzle(db, { schema: database });
 
+    const rawQuery = (
+      execute: (client: typeof drizzleClient) => string,
+    ): string => execute(drizzleClient);
+
     const query = <T>(execute: (client: typeof drizzleClient) => Promise<T>) =>
       Effect.async<T, ErrorPgLite>((cb) => {
         execute(drizzleClient)
@@ -37,7 +41,7 @@ const make = ({ dataDir }: PgLiteConfig) =>
           });
       });
 
-    return { db, query };
+    return { db, query, rawQuery };
   });
 
 export class PgLite extends Context.Tag("PgLite")<

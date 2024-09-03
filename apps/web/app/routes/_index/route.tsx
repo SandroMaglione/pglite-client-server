@@ -1,33 +1,23 @@
-import { useLoaderData } from "@remix-run/react";
-import { Array, Effect, pipe } from "effect";
-import { ApiDatabase } from "~/services/ApiDatabase";
-import { RuntimeClient } from "~/services/RuntimeClient";
-import { Versioning } from "~/services/Versioning";
+import { useLiveQuery } from "@electric-sql/pglite-react";
+import { food } from "@pglite/schema";
+import { desc } from "drizzle-orm";
+import { Array, pipe } from "effect";
+import { usePgLiteClient } from "~/pglite-client-provider";
 import InsertFoodForm from "./insert-food-form";
 
-export const clientLoader = async () => {
-  return RuntimeClient.runPromise(
-    Effect.gen(function* () {
-      const appVersion = yield* Versioning.up;
-      const foods = yield* ApiDatabase.getAllFoods;
-      return { appVersion, foods };
-    }),
-  );
-};
-
-export function HydrateFallback() {
-  return <p>Getting your data ready...</p>;
-}
-
 export default function Index() {
-  const { appVersion, foods } = useLoaderData<typeof clientLoader>();
+  const query = usePgLiteClient();
+  const foods = useLiveQuery<typeof food.$inferSelect>(
+    // 👇 Query built using Drizzle, and executed as SQL string for PGLite live query
+    query((_) => _.select().from(food).orderBy(desc(food.id)).toSQL().sql),
+    [],
+  );
+
   return (
     <main>
-      <p>{`Running on version ${appVersion}`}</p>
       <InsertFoodForm />
-
       {pipe(
-        foods,
+        foods?.rows ?? [],
         Array.match({
           onEmpty: () => <p>No foods</p>,
           onNonEmpty: (foods) => (
