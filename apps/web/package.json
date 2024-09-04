@@ -15,6 +15,7 @@
     "@electric-sql/client": "^0.3.3",
     "@electric-sql/pglite": "^0.2.5",
     "@electric-sql/pglite-react": "^0.2.5",
+    "@electric-sql/pglite-sync": "^0.2.5",
     "@electric-sql/react": "^0.3.3",
     "@pglite/api": "workspace:*",
     "@pglite/schema": "workspace:*",

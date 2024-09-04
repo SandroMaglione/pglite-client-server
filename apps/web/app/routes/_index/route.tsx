@@ -5,7 +5,6 @@ import ListServings from "./list-servings";
 export default function Index() {
   return (
     <main>
-      {/* <FooShapes /> */}
       <InsertFoodForm />
       <AddServingForm />
       <ListServings />

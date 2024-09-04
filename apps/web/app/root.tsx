@@ -9,6 +9,7 @@ import {
 } from "@remix-run/react";
 import { Effect } from "effect";
 import { PgLiteClientProvider } from "./pglite-client-provider";
+import { ElectricShapeSync } from "./services/ElectricShapeSync";
 import { PgLite } from "./services/PgLite";
 import { RuntimeClient } from "./services/RuntimeClient";
 import { Versioning } from "./services/Versioning";
@@ -36,6 +37,8 @@ export const clientLoader = async () => {
     Effect.gen(function* () {
       const { db, rawQuery } = yield* PgLite;
       const appVersion = yield* Versioning.up;
+      yield* ElectricShapeSync.foo;
+
       return { appVersion, db, rawQuery };
     }),
   );

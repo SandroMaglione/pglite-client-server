@@ -4,7 +4,6 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "tsx src/main.ts",
     "typecheck": "tsc"
   },
   "keywords": [],
