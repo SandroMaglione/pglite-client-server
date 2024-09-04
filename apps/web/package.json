@@ -14,6 +14,7 @@
     "@effect/schema": "^0.72.0",
     "@electric-sql/pglite": "^0.2.5",
     "@electric-sql/pglite-react": "^0.2.5",
+    "@electric-sql/react": "^0.3.3",
     "@pglite/api": "workspace:*",
     "@pglite/schema": "workspace:*",
     "@remix-run/node": "^2.11.2",

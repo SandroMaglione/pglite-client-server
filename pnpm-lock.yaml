@@ -60,6 +60,9 @@ importers:
       '@electric-sql/pglite-react':
         specifier: ^0.2.5
         version: 0.2.5(@electric-sql/pglite@0.2.5)(react@18.3.1)
+      '@electric-sql/react':
+        specifier: ^0.3.3
+        version: 0.3.3(react@18.3.1)
       '@pglite/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -614,6 +617,12 @@ packages:
       fast-check: 3.22.0
     dev: false
 
+  /@electric-sql/client@0.3.3:
+    resolution: {integrity: sha512-fOSTaLZPqa8R9etMm1/rprSIcEQMy1X09XMrn/Yh09rr5z0Da7YdUwjCxiPZD0+B7zkbwi3B7wQS9JFkNugw+Q==}
+    optionalDependencies:
+      '@rollup/rollup-darwin-arm64': 4.21.2
+    dev: false
+
   /@electric-sql/pglite-react@0.2.5(@electric-sql/pglite@0.2.5)(react@18.3.1):
     resolution: {integrity: sha512-+6VMJsSLhUyxbtsN/HPRuXxaxDBDDUSix91jiOmyxbY5DbUwLqqGRf6n6wi1DQAQEoMSPi2FUNIhhRUW6MnCFQ==}
     peerDependencies:
@@ -626,6 +635,19 @@ packages:
 
   /@electric-sql/pglite@0.2.5:
     resolution: {integrity: sha512-LrMX2kX0mCVN4xkhIDv1KBVukWtoOI/+P9MDQgHX5QEeZCi5S60LZOa0VWXjufPEz7mJtbuXWJRujD++t0gsHA==}
+    dev: false
+
+  /@electric-sql/react@0.3.3(react@18.3.1):
+    resolution: {integrity: sha512-oC4Nj7KXxdhLDvTAckB25yy3UsWgUEyNuzqRzcu05yy62fkYgySC3DBMDWwslLblM4ItEG3a+BrJ2JN4hEl3kw==}
+    peerDependencies:
+      react: ^18.3.1
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      '@electric-sql/client': 0.3.3
+      react: 18.3.1
+      use-sync-external-store: 1.2.2(react@18.3.1)
     dev: false
 
   /@emotion/hash@0.9.2:
@@ -2133,7 +2155,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-x64@4.21.2:
