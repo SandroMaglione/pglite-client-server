@@ -54,6 +54,9 @@ importers:
       '@effect/schema':
         specifier: ^0.72.0
         version: 0.72.0(effect@3.7.0)
+      '@electric-sql/client':
+        specifier: ^0.3.3
+        version: 0.3.3
       '@electric-sql/pglite':
         specifier: ^0.2.5
         version: 0.2.5

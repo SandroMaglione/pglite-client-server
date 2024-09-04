@@ -14,12 +14,19 @@ const ApiClientConfig = Config.all({
   ),
 });
 
+const ElectricSqlConfig = Config.all({
+  baseUrl: Config.string("VITE_ELECTRIC_SQL_BASE_URL").pipe(
+    Config.withDefault("http://localhost:3000"),
+  ),
+});
+
 const PgLiteConfig = Config.all({
   dataDir: Config.string("VITE_DATA_DIR"),
 });
 
 const ApiClientLive = ApiClient.Live(ApiClientConfig);
 const PgLiteLive = PgLite.Live(PgLiteConfig);
+// const ElectricSqlLive = ElectricSql.Live(ElectricSqlConfig);
 const VersioningLive = Versioning.Live.pipe(Layer.provide(PgLiteLive));
 const ApiDatabaseLive = ApiDatabase.Live.pipe(Layer.provide(PgLiteLive));
 
@@ -28,6 +35,7 @@ const MainLayer = Layer.mergeAll(
   ApiClientLive,
   VersioningLive,
   ApiDatabaseLive,
+  // ElectricSqlLive,
 ).pipe(Layer.provide(ConfigProviderVite));
 
 export const RuntimeClient = ManagedRuntime.make(MainLayer);
