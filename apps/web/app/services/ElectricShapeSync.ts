@@ -1,19 +1,25 @@
-import { Config, Effect, Layer } from "effect";
+import { Config, Data, Effect, Layer } from "effect";
 import { PgLite } from "./PgLite";
 
 interface ElectricShapeSyncConfig {
   readonly baseUrl: string;
 }
 
+class ErrorSyncShape extends Data.TaggedError("ErrorSyncShape")<{
+  error: unknown;
+}> {}
+
 const make = ({ baseUrl }: ElectricShapeSyncConfig) =>
   Effect.map(PgLite, ({ db }) => ({
-    foo: Effect.promise(() =>
-      db.electric.syncShapeToTable({
-        url: `${baseUrl}/v1/shape/food`,
-        table: "food",
-        primaryKey: ["id"],
-      }),
-    ),
+    food: Effect.tryPromise({
+      try: () =>
+        db.electric.syncShapeToTable({
+          url: `${baseUrl}/v1/shape/food`,
+          table: "food",
+          primaryKey: ["id"],
+        }),
+      catch: (error) => new ErrorSyncShape({ error }),
+    }),
   }));
 
 export class ElectricShapeSync extends Effect.Tag("ElectricShapeSync")<

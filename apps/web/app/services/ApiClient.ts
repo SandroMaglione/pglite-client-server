@@ -7,12 +7,8 @@ interface ApiClientConfig {
 }
 
 const make = ({ baseUrl }: ApiClientConfig) =>
-  Effect.gen(function* () {
-    const client = yield* HttpApiClient.make(MyApi, {
-      baseUrl,
-    });
-
-    return { client };
+  HttpApiClient.make(MyApi, {
+    baseUrl,
   });
 
 export class ApiClient extends Context.Tag("ApiClient")<

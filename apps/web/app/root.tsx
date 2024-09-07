@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { Effect } from "effect";
+import { Console, Effect } from "effect";
 import { PgLiteClientProvider } from "./pglite-client-provider";
 import { ElectricShapeSync } from "./services/ElectricShapeSync";
 import { PgLite } from "./services/PgLite";
@@ -37,9 +37,10 @@ export const clientLoader = async () => {
     Effect.gen(function* () {
       const { db, rawQuery } = yield* PgLite;
       const appVersion = yield* Versioning.up;
-      yield* ElectricShapeSync.foo;
+      const sync = yield* ElectricShapeSync.food;
+      yield* Console.log(sync);
 
-      return { appVersion, db, rawQuery };
+      return { appVersion, db, rawQuery, sync };
     }),
   );
 };
@@ -54,6 +55,7 @@ export default function App() {
     db,
     // @ts-expect-error: Cannot infer function type from loader data?
     rawQuery,
+    sync,
   } = useLoaderData<typeof clientLoader>();
   return (
     <>
